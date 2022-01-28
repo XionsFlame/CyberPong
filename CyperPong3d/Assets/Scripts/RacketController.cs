@@ -1,0 +1,71 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class RacketController : MonoBehaviour
+{
+    public float speed;
+
+    public KeyCode Up;
+    public KeyCode Down;
+
+    public bool isPlayer = true;
+
+    public float offset = 0.2f;
+    private Rigidbody rb;
+    private Transform ball;
+    
+    // Start is called before the first frame update
+    void Start()
+    {
+        rb = GetComponent<Rigidbody>();
+        ball = GameObject.FindGameObjectWithTag("Ball").transform;
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if(isPlayer)
+        {
+            MoveByPlayer();
+        }
+        else
+        {
+            MoveByComputer();
+        }
+    }
+
+    private void MoveByComputer()
+    {
+        if (ball.position.z > transform.position.z + offset)
+        {
+            rb.velocity = Vector3.forward * speed;
+        }
+        else if (ball.position.z < transform.position.z - offset)
+        {
+            rb.velocity = Vector3.back * speed;
+        }
+        else
+        {
+            rb.velocity = Vector3.zero;
+        }
+    }
+
+    private void MoveByPlayer()
+    {
+        if (Input.GetKey(this.Up))
+        {
+            rb.velocity = Vector3.forward * speed;
+        }
+        if (Input.GetKey(this.Down))
+        {
+            rb.velocity = Vector3.back * speed;
+        }
+
+        if (!Input.GetKey(this.Up) && !Input.GetKey(this.Down))
+        {
+            rb.velocity = Vector3.zero;
+        }
+    }
+}
